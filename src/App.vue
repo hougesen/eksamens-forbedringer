@@ -1,32 +1,52 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div class="container mx-auto">
+        <TopNav v-if="loggedIn" />
+
+        <div>
+            <router-view />
+        </div>
     </div>
-    <router-view/>
-  </div>
 </template>
 
+<script lang="ts">
+import Vue from 'vue';
+import { mapGetters } from 'vuex';
+
+export default Vue.extend({
+    components: {
+        TopNav: () => import('@/components/TopNav.vue'),
+    },
+
+    computed: {
+        ...mapGetters(['loggedIn']),
+    },
+});
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+* {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    transition: 0.4s;
+    line-height: 1.6;
 }
 
-#nav {
-  padding: 30px;
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    line-height: 1.6;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+body,
+html {
+    scroll-behavior: smooth;
+    height: 100%;
+    padding-top: 0;
+    width: 100%;
 }
 </style>
