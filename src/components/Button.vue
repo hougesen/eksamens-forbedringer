@@ -20,8 +20,8 @@
     <button
         v-else
         :type="type"
-        @click="emitClick"
         class="px-6 h-10 bg-green-700 border border-green-700 rounded text-white hover:bg-transparent hover:text-gray-700"
+        @click="emitClick"
     >
         {{ text }}
     </button>
@@ -54,7 +54,7 @@ export default Vue.extend({
 
     computed: {
         buttonType(): string {
-            if (this.url?.indexOf('http') !== -1) {
+            if (this.url && this.url?.indexOf('http') !== -1) {
                 return 'external';
             }
 

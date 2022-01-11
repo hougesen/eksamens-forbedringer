@@ -10,6 +10,10 @@
     <h3 v-else-if="size === 'small'" class="text-lg font-bold text-gray-800">
         <slot> {{ text }} </slot>
     </h3>
+
+    <h4 v-else class="text-base font-medium text-gray-800">
+        <slot> {{ text }} </slot>
+    </h4>
 </template>
 
 <script lang="ts">
@@ -25,7 +29,7 @@ export default Vue.extend({
         },
         size: {
             type: String,
-            default: 'large',
+            default: null,
         },
     },
 });
