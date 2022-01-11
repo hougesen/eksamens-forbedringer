@@ -1,9 +1,26 @@
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.Design;
+using Microsoft.EntityFrameworkCore.Diagnostics;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
+using Microsoft.EntityFrameworkCore.Query;
+using Microsoft.EntityFrameworkCore.Scaffolding;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Update;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Server.Models;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using System;
+using System.Linq;
+using System.Collections;
+
 
 namespace Server.Controllers
 
@@ -56,7 +73,7 @@ namespace Server.Controllers
             return new JsonResult(route);
         }
 
-        [HttpDelete("delete/{routeId}")]
+        [HttpDelete("{routeId}")]
         async public Task<IActionResult> DeleteRoute(int routeId)
         {
             var route = await _context.Routes.FindAsync(routeId);
@@ -71,8 +88,29 @@ namespace Server.Controllers
 
             return NoContent();
         }
-    }
 
+        [HttpGet("{routeId}")]
+        async public Task<IActionResult> GetRoute(int routeId)
+        {
+            Route route = await _context.Routes.Where((r) => r.RouteId == routeId).AsNoTracking().FirstAsync();
+
+            if (route == null)
+            {
+                return NotFound();
+            }
+
+
+            List<SignUpDriver> signups = await _context.SignUpDrivers.Where((s) => s.RouteId == routeId).AsNoTracking().ToListAsync();
+
+            GetRouteResponse response = new()
+            {
+                route = route,
+                signups = signups != null ? signups : null
+            };
+
+            return new JsonResult(response);
+        }
+    }
 
     public class CreateRouteBody
     {
@@ -86,5 +124,11 @@ namespace Server.Controllers
         public int? UserId { get; set; }
         public int DepartmentId { get; set; }
         public int RouteEstTime { get; set; }
+    }
+
+    public class GetRouteResponse
+    {
+        public Route route { get; set; }
+        public List<SignUpDriver> signups { get; set; }
     }
 }
