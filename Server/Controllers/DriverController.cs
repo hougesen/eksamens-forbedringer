@@ -23,7 +23,7 @@ namespace Server.Controllers
         [HttpGet("")]
         async public Task<IActionResult> GetDrivers()
         {
-            List<User> drivers = await _context.Users.Where((u) => u.UserTypeId == 2).ToListAsync();
+            List<User> drivers = await _context.Users.Where((u) => u.UserTypeId == 2).AsNoTracking().ToListAsync();
 
             if (drivers != null && drivers.Count > 0)
             {

@@ -55,6 +55,22 @@ namespace Server.Controllers
 
             return new JsonResult(route);
         }
+
+        [HttpDelete("delete/{routeId}")]
+        async public Task<IActionResult> DeleteRoute(int routeId)
+        {
+            var route = await _context.Routes.FindAsync(routeId);
+
+            if (route == null)
+            {
+                return NotFound();
+            }
+
+            _context.Routes.Remove(route);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
     }
 
 
