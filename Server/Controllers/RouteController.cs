@@ -21,7 +21,6 @@ using System;
 using System.Linq;
 using System.Collections;
 
-
 namespace Server.Controllers
 
 {
@@ -99,7 +98,6 @@ namespace Server.Controllers
                 return NotFound();
             }
 
-
             List<SignUpDriver> signups = await _context.SignUpDrivers.Where((s) => s.RouteId == routeId).AsNoTracking().ToListAsync();
 
             GetRouteResponse response = new()
@@ -109,6 +107,17 @@ namespace Server.Controllers
             };
 
             return new JsonResult(response);
+        }
+
+        [HttpGet("user/{userId}")]
+        async public Task<IActionResult> GetUserRoutes(int userId) {
+            Route[] routes = await _context.Routes.Where((r) => r.userId == userId).AsNoTracking().ToListAsync();
+
+            if (routes == null || routes.Length() == 0) {
+                return NoContent();
+            }
+
+            return new JsonResult(routes);
         }
     }
 
