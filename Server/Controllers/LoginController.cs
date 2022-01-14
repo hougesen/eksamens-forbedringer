@@ -23,7 +23,9 @@ namespace Server.Controllers
         [HttpPost()]
         async public Task<IActionResult> Login([FromBody] LoginRequest body)
         {
-            User user = await _context.Users.Where((u) => u.UserEmail == body.email.ToLower() && u.UserPassword == body.password).FirstOrDefaultAsync();
+            User user = await _context.Users.Where(
+                (u) => u.UserEmail == body.email.ToLower()
+                    && u.UserPassword == body.password).FirstOrDefaultAsync();
 
             if (user != null)
             {

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -38,7 +39,7 @@ namespace Server.Controllers
         [HttpGet("route/{routeId}")]
         async public Task<IActionResult> GetRouteSignups(int routeId)
         {
-            var routeSignups = await _context.SignUpDrivers.Where(
+            List<User> routeSignups = await _context.SignUpDrivers.Where(
                 (s) => s.RouteId == routeId).Include(
                     (s) => s.User).Select(
                         (s) => new User()
@@ -61,7 +62,7 @@ namespace Server.Controllers
         [HttpGet("user/{userId}")]
         async public Task<IActionResult> GetUserSignups(int userId)
         {
-            var signups = await _context.SignUpDrivers.Where((s) => s.UserId == userId).AsNoTracking().ToListAsync();
+            List<SignUpDriver> signups = await _context.SignUpDrivers.Where((s) => s.UserId == userId).AsNoTracking().ToListAsync();
 
             if (signups != null && signups.Count() > 0)
             {

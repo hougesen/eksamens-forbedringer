@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +23,8 @@ namespace Server.Controllers
         [HttpGet("")]
         async public Task<IActionResult> GetDepartments()
         {
-            var departments = await _context.Departments.AsNoTracking().OrderBy((d) => d.DepartmentName).ToListAsync();
+            List<Department> departments = await _context.Departments.AsNoTracking().OrderBy(
+                (d) => d.DepartmentName).ToListAsync();
 
             if (departments != null && departments.Count() > 0)
             {
@@ -36,7 +38,8 @@ namespace Server.Controllers
         [HttpGet("{departmentId}")]
         async public Task<IActionResult> GetDepartment(int departmentId)
         {
-            var department = await _context.Departments.Where((d) => d.DepartmentId == departmentId).AsNoTracking().FirstOrDefaultAsync();
+            Department department = await _context.Departments.Where(
+                (d) => d.DepartmentId == departmentId).AsNoTracking().FirstOrDefaultAsync();
 
             if (department != null)
             {

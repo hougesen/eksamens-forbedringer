@@ -24,7 +24,8 @@ namespace Server.Controllers
         [HttpGet("")]
         async public Task<IActionResult> GetRoutes()
         {
-            List<Route> routes = await _context.Routes.OrderBy((r) => r.RouteStartDate).AsNoTracking().ToListAsync();
+            List<Route> routes = await _context.Routes.OrderBy(
+                (r) => r.RouteStartDate).AsNoTracking().ToListAsync();
 
             if (routes != null && routes.Count() > 0)
             {
@@ -85,7 +86,7 @@ namespace Server.Controllers
         [HttpDelete("{routeId}")]
         async public Task<IActionResult> DeleteRoute(int routeId)
         {
-            var route = await _context.Routes.FindAsync(routeId);
+            Route route = await _context.Routes.FindAsync(routeId);
 
             if (route == null)
             {
@@ -101,14 +102,16 @@ namespace Server.Controllers
         [HttpGet("{routeId}")]
         async public Task<IActionResult> GetRoute(int routeId)
         {
-            Route route = await _context.Routes.Where((r) => r.RouteId == routeId).AsNoTracking().FirstAsync();
+            Route route = await _context.Routes.Where(
+                (r) => r.RouteId == routeId).AsNoTracking().FirstAsync();
 
             if (route == null)
             {
                 return NotFound();
             }
 
-            List<SignUpDriver> signups = await _context.SignUpDrivers.Where((s) => s.RouteId == routeId).AsNoTracking().ToListAsync();
+            List<SignUpDriver> signups = await _context.SignUpDrivers.Where(
+                (s) => s.RouteId == routeId).AsNoTracking().ToListAsync();
 
             GetRouteResponse response = new()
             {
@@ -122,7 +125,9 @@ namespace Server.Controllers
         [HttpGet("user/{userId}")]
         async public Task<IActionResult> GetUserRoutes(int userId)
         {
-            var routes = await _context.Routes.Where((r) => r.UserId == userId).OrderBy((r) => r.RouteStartDate).AsNoTracking().ToListAsync();
+            List<Route> routes = await _context.Routes.Where(
+                (r) => r.UserId == userId).OrderBy(
+                    (r) => r.RouteStartDate).AsNoTracking().ToListAsync();
 
             if (routes == null || routes.Count() == 0)
             {
@@ -140,7 +145,11 @@ namespace Server.Controllers
             // 03 12 1999 23 59 59 
             DateTime endDayDate = beginDayDate.AddDays(1).AddSeconds(-1);
 
-            var routes = await _context.Routes.Where((r) => r.UserId == null && r.RouteStartDate <= endDayDate && r.RouteStartDate >= beginDayDate).OrderBy((r) => r.RouteStartDate).AsNoTracking().ToListAsync();
+            List<Route> routes = await _context.Routes.Where(
+                (r) => r.UserId == null
+                        && r.RouteStartDate <= endDayDate
+                        && r.RouteStartDate >= beginDayDate).OrderBy(
+                            (r) => r.RouteStartDate).AsNoTracking().ToListAsync();
 
             if (routes != null && routes.Count() > 0)
             {
@@ -166,11 +175,10 @@ namespace Server.Controllers
                 {
                     await _context.SaveChangesAsync();
 
-                    var driversAvailableDates = await _context.DriversAvailables.Where(
+                    List<DriversAvailable> driversAvailableDates = await _context.DriversAvailables.Where(
                         (d) => d.UserId == userId
-                                && d.DriversAvailableDate <= route.RouteEndDate
-                                && d.DriversAvailableDate >= route.RouteStartDate
-                                ).ToListAsync();
+                            && d.DriversAvailableDate <= route.RouteEndDate
+                            && d.DriversAvailableDate >= route.RouteStartDate).ToListAsync();
 
                     if (driversAvailableDates != null && driversAvailableDates.Count() > 0)
                     {

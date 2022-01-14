@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,7 +23,7 @@ namespace Server.Controllers
         [HttpGet("")]
         async public Task<IActionResult> GetLocations()
         {
-            var location = await _context.Locations.Include(
+            List<LocationRequest> location = await _context.Locations.Include(
                 (l) => l.City).ThenInclude(
                     (city) => city.Country).Select(
                         (l) => new LocationRequest()
@@ -48,19 +49,20 @@ namespace Server.Controllers
         [HttpGet("{locationId}")]
         async public Task<IActionResult> GetLocation(int locationId)
         {
-            var location = await _context.Locations.Where((l) => l.LocationId == locationId).Include(
-                (l) => l.City).ThenInclude(
-                    (city) => city.Country).Select(
-                        (l) => new LocationRequest()
-                        {
-                            LocationId = l.LocationId,
-                            LocationAddress = l.LocationAddress,
-                            LocationPostalCode = l.LocationPostalCode,
-                            CityId = l.CityId ?? null,
-                            CityName = l.City.CityName ?? null,
-                            CountryId = l.City.CountryId ?? null,
-                            CountryName = l.City.Country.CountryName ?? null,
-                        }).FirstOrDefaultAsync();
+            LocationRequest location = await _context.Locations.Where(
+                (l) => l.LocationId == locationId).Include(
+                    (l) => l.City).ThenInclude(
+                        (city) => city.Country).Select(
+                            (l) => new LocationRequest()
+                            {
+                                LocationId = l.LocationId,
+                                LocationAddress = l.LocationAddress,
+                                LocationPostalCode = l.LocationPostalCode,
+                                CityId = l.CityId ?? null,
+                                CityName = l.City.CityName ?? null,
+                                CountryId = l.City.CountryId ?? null,
+                                CountryName = l.City.Country.CountryName ?? null,
+                            }).FirstOrDefaultAsync();
 
             if (location != null)
             {
