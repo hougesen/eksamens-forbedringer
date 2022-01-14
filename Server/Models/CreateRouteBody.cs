@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 #nullable disable
 
 namespace Server.Models

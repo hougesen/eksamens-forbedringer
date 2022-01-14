@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-
 #nullable disable
 
-namespace Server.Models 
+namespace Server.Models
 {
-    public class DriverRequest {
+    public class DriverRequest
+    {
         public int? UserId { get; set; }
 
         public string UserEmail { get; set; }

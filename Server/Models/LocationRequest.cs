@@ -1,10 +1,9 @@
-using System.Collections.Generic;
-
 #nullable disable
 
-namespace Server.Models 
+namespace Server.Models
 {
-    public class LocationRequest {
+    public class LocationRequest
+    {
         public int LocationId { get; set; }
 
         public string LocationAddress { get; set; }

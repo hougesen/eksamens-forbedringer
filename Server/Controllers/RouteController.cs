@@ -1,24 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Scaffolding;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Update;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
+using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Server.Controllers
 
@@ -76,21 +62,21 @@ namespace Server.Controllers
         async public Task<IActionResult> EditRoute([FromBody] Route body)
         {
             Route route = await _context.Routes.FindAsync(body.RouteId);
-            if(route != null) 
+            if (route != null)
             {
                 route.RouteDescription = body.RouteDescription;
-                route.RouteStartDate =  body.RouteStartDate ;
-                route.RouteEndDate =  body.RouteEndDate ;
+                route.RouteStartDate = body.RouteStartDate;
+                route.RouteEndDate = body.RouteEndDate;
                 route.RouteStartLocationId = body.RouteStartLocationId;
                 route.RouteEndLocationId = body.RouteEndLocationId;
                 route.RouteHighPriority = body.RouteHighPriority;
                 route.DepartmentId = body.DepartmentId;
                 route.RouteEstTime = body.RouteEstTime;
-           
+
                 _context.Entry(route).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();
-                
+
                 return new JsonResult(route);
             }
             return NotFound();
@@ -134,11 +120,11 @@ namespace Server.Controllers
         }
 
         [HttpGet("user/{userId}")]
-        async public Task<IActionResult> GetUserRoutes(int userId) 
+        async public Task<IActionResult> GetUserRoutes(int userId)
         {
             var routes = await _context.Routes.Where((r) => r.UserId == userId).OrderBy((r) => r.RouteStartDate).AsNoTracking().ToListAsync();
 
-            if (routes == null || routes.Count() == 0) 
+            if (routes == null || routes.Count() == 0)
             {
                 return NoContent();
             }
@@ -156,7 +142,7 @@ namespace Server.Controllers
 
             var routes = await _context.Routes.Where((r) => r.UserId == null && r.RouteStartDate <= endDayDate && r.RouteStartDate >= beginDayDate).OrderBy((r) => r.RouteStartDate).AsNoTracking().ToListAsync();
 
-            if (routes != null && routes.Count() > 0) 
+            if (routes != null && routes.Count() > 0)
             {
                 return new JsonResult(routes);
             }
@@ -165,11 +151,11 @@ namespace Server.Controllers
         }
 
         [HttpPatch("assign/{routeId}/{userId}")]
-        async public Task<IActionResult> AssignRouteUser (int routeId, int userId) 
+        async public Task<IActionResult> AssignRouteUser(int routeId, int userId)
         {
             Route route = await _context.Routes.FindAsync(routeId);
 
-            if (route != null) 
+            if (route != null)
             {
                 route.UserId = userId;
                 route.RouteStatusId = 2;
@@ -181,9 +167,9 @@ namespace Server.Controllers
                     await _context.SaveChangesAsync();
 
                     var driversAvailableDates = await _context.DriversAvailables.Where(
-                        (d) => d.UserId == userId 
-                                && d.DriversAvailableDate <= route.RouteEndDate 
-                                && d.DriversAvailableDate >= route.RouteStartDate 
+                        (d) => d.UserId == userId
+                                && d.DriversAvailableDate <= route.RouteEndDate
+                                && d.DriversAvailableDate >= route.RouteStartDate
                                 ).ToListAsync();
 
                     if (driversAvailableDates != null && driversAvailableDates.Count() > 0)
@@ -212,7 +198,7 @@ namespace Server.Controllers
 
             if (route != null)
             {
-                route.RouteStatusId = 3; 
+                route.RouteStatusId = 3;
                 _context.Entry(route).State = EntityState.Modified;
 
                 await _context.SaveChangesAsync();

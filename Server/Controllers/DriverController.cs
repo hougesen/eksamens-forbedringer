@@ -1,24 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Design;
-using Microsoft.EntityFrameworkCore.Diagnostics;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Internal;
-using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
-using Microsoft.EntityFrameworkCore.Query;
-using Microsoft.EntityFrameworkCore.Scaffolding;
-using Microsoft.EntityFrameworkCore.SqlServer;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Update;
-using Microsoft.EntityFrameworkCore.ValueGeneration;
 using Microsoft.EntityFrameworkCore;
 using Server.Models;
-using System.Collections.Generic;
-using System.Collections;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 
 namespace Server.Controllers
 
@@ -42,13 +26,13 @@ namespace Server.Controllers
                 (d) => new DriverRequest()
                 {
                     UserId = d.UserId,
-                    DriverInformationId = d.DriverInformationId, 
+                    DriverInformationId = d.DriverInformationId,
                     UserEmail = d.User.UserEmail,
                     UserFullName = d.User.UserFullName,
                     UserPhoneNumber = d.User.UserPhoneNumber,
-                    LocationId = d.LocationId ?? null, 
-                    DriverLicenceId = d.DriverLicenceId ?? null, 
-                    LorryLicenceId = d.LorryLicenceId ?? null, 
+                    LocationId = d.LocationId ?? null,
+                    DriverLicenceId = d.DriverLicenceId ?? null,
+                    LorryLicenceId = d.LorryLicenceId ?? null,
                     Eucertificate = d.Eucertificate ?? null,
                 }).ToListAsync();
 
@@ -62,7 +46,7 @@ namespace Server.Controllers
 
         // GET: api/drivers/available/1
         [HttpGet("available/{userId}")]
-        async public Task<IActionResult> GetDriverAvailability(int userId) 
+        async public Task<IActionResult> GetDriverAvailability(int userId)
         {
             var dates = await _context.DriversAvailables.Where((d) => d.UserId == userId).ToListAsync();
 
