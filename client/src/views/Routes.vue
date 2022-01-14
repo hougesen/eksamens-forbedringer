@@ -7,10 +7,10 @@ import Vue from 'vue';
 import { mapGetters } from 'vuex';
 
 export default Vue.extend({
-    name: 'Dashboard',
+    name: 'Routes',
 
     components: {
-        AdminDashboard: () => import('@/views/admin/AdminDashboard.vue'),
+        AdminRoutes: () => import('@/views/admin/routes/AdminRoutes.vue'),
         DriverRoutes: () => import('@/views/driver/DriverRoutes.vue'),
     },
 
@@ -19,7 +19,7 @@ export default Vue.extend({
 
         appropriateComponent(): string {
             if (this.getUserInfo?.userTypeId === 1) {
-                return 'AdminDashboard';
+                return 'AdminRoutes';
             }
 
             return 'DriverRoutes';

@@ -21,39 +21,47 @@ using System.Threading.Tasks;
 using System;
 
 namespace Server.Controllers
+
 {
-
     [ApiController]
-    [Route("api/login")]
-
-    public class LoginController : ControllerBase
+    [Route("api/departments")]
+    public class DepartmentController : ControllerBase
     {
         private readonly uclweb_gr1Context _context;
 
-        public LoginController(uclweb_gr1Context context)
+        public DepartmentController(uclweb_gr1Context context)
         {
             _context = context;
         }
 
-        // POST: api/users/login
-        [HttpPost()]
-        async public Task<IActionResult> Login([FromBody] LoginRequest body)
+        // GET: api/departments/
+        [HttpGet("")]
+        async public Task<IActionResult> GetDepartments() 
         {
-            User user = await _context.Users.Where((u) => u.UserEmail == body.email.ToLower() && u.UserPassword == body.password).FirstOrDefaultAsync();
+            var departments = await _context.Departments.AsNoTracking().OrderBy((d) => d.DepartmentName).ToListAsync();
 
-            if (user != null)
+            if (departments != null && departments.Count() > 0)
             {
-
-                return new JsonResult(user);
+                return new JsonResult(departments);
             }
 
             return NotFound();
-        }
+        }  
+
+       // GET: api/departments/1
+        [HttpGet("{departmentId}")]
+        async public Task<IActionResult> GetDepartment(int departmentId) 
+        {
+            var department = await _context.Departments.Where((d) => d.DepartmentId == departmentId).AsNoTracking().FirstOrDefaultAsync();
+
+            if (department != null)
+            {
+                return new JsonResult(department);
+            }
+
+            return NotFound();
+        }   
     }
 
-    public class LoginRequest
-    {
-        public string email { get; set; }
-        public string password { get; set; }
-    }
+
 }

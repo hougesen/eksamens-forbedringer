@@ -1,7 +1,5 @@
 <template>
     <div>
-        <h1>Admin dashboard</h1>
-
         <div class="grid grid-cols-3 gap-4">
             <KPI text="Ruter denne uge" :value="Math.floor(Math.random() * 100000)" />
 

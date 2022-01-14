@@ -2,7 +2,7 @@
     <router-link
         v-if="buttonType === 'internal'"
         :to="url"
-        class="text-gray-800 hover:text-gray-700 font-medium text-lg"
+        class="text-gray-800 hover:text-gray-700 font-medium text-lg pointer"
     >
         {{ text }}
     </router-link>
@@ -12,7 +12,7 @@
         :href="url"
         rel="noopener noreferrer"
         target="_blank"
-        class="text-gray-800 hover:text-gray-700 font-medium text-lg"
+        class="text-gray-800 hover:text-gray-700 font-medium text-lg pointer"
     >
         {{ text }}
     </a>
@@ -20,7 +20,7 @@
     <button
         v-else
         :type="type"
-        class="px-6 h-10 bg-green-700 border border-green-700 rounded text-white hover:bg-transparent hover:text-gray-700"
+        class="px-4 py-2 h-auto bg-green-700 border border-green-700 rounded text-white hover:bg-transparent hover:text-gray-700 pointer"
         @click="emitClick"
     >
         {{ text }}

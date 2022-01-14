@@ -1,67 +1,74 @@
 declare interface Location {
-    LocationId?: number;
-    LocationAddress?: string;
-    LocationPostalCode?: string;
-    CityId?: number;
-    CityName?: string;
-    CountryId?: number;
-    CountryName?: string;
+    locationId?: number;
+    locationAddress?: string;
+    locationPostalCode?: string;
+    cityId?: number;
+    cityName?: string;
+    countryId?: number;
+    countryName?: string;
 }
 
 declare interface DriversAvailable {
-    DriversAvailableId: number;
-    DriversAvailableDate: Date;
+    driversAvailableId: number;
+    driversAvailableDate: Date;
+    userId: number;
 }
 
 declare interface DriverInformation {
-    DriverInformationId: number;
-    UserId: number;
-    LocationId?: number;
-    DriverLicenceId?: number;
-    LorryLicenceId?: number;
-    Eucertificate?: number;
+    driverInformationId: number;
+    userId: number;
+    locationId?: number;
+    driverLicenceId?: number;
+    lorryLicenceId?: number;
+    eucertificate?: number;
 }
 
 // eslint-disable-next-line no-shadow
 declare enum UserType {
-    Driver = 0,
     Admin = 1,
+    Driver = 2,
 }
 
 declare interface User {
-    UserId: number;
-    UserTypeId: UserType;
-    UserEmail?: string;
-    UserFullName: string;
-    UserPhoneNumber?: number;
-    DriverInformation?: DriverInformation;
-    availableDates?: DriversAvailable[];
+    userId: number;
+    userTypeId: UserType;
+    userEmail?: string;
+    userFullName: string;
+    userPhoneNumber?: string;
+    driverInformation?: DriverInformation;
+    driversAvailables?: DriversAvailable[];
 }
 
 declare interface Department {
-    DepartmentId: number;
-    DepartmentName: string;
-    DepartmentContactNumber?: string;
-    DepartmentEmail?: string;
+    departmentId: number;
+    departmentName: string;
+    departmentContactNumber?: string;
+    departmentEmail?: string;
 }
 
 // eslint-disable-next-line no-shadow
 declare enum RouteStatus {
-    MissingDriver = 0,
-    Pending = 1,
-    Completed = 2,
+    MissingDriver = 1,
+    Pending = 2,
+    Completed = 3,
+}
+
+declare interface SignUpDriver {
+    userId: number;
+    routeId: number;
 }
 
 declare interface Route {
-    RouteId?: number;
-    RouteDescription?: string;
-    RouteStartDate?: Date;
-    RouteEndDate?: Date;
-    RouteStartLocationId?: number;
-    RouteEndLocationId?: number;
-    RouteHighPriority?: boolean;
-    RouteStatusId?: RouteStatus;
-    UserId?: number;
-    DepartmentId?: number;
-    RouteEstTime?: number;
+    routeId: ?number;
+    routeDescription: ?string;
+    routeStartDate: ?(Date | string);
+    routeEndDate: ?(Date | string);
+    routeStartLocationId: ?number;
+    routeEndLocationId: ?number;
+    routeHighPriority: ?boolean;
+    routeStatusId: ?RouteStatus;
+    userId: ?number;
+    departmentId: ?number;
+    routeEstTime: ?number;
+    signUpDrivers: ?SignUpDriver[];
 }

@@ -23,12 +23,11 @@ const routePaths = [
     },
     {
         path: '/routes/',
-        folders: 'admin/routes/',
-        name: 'AdminRoutes',
+        folders: '',
+        name: 'Routes',
         meta: {
             title: 'Ture',
             requiresAuth: true,
-            userType: 1,
         },
     },
     {
@@ -72,8 +71,18 @@ const router = new VueRouter({
 
 // TODO: Actually make this secure
 router.beforeEach((to, from, next) => {
-    const autheticated = store.getters.loggedIn;
-    console.log(to);
+    let userInfoLocal: User | null = null;
+
+    if (!store?.getters?.getUserInfo?.userId) {
+        userInfoLocal = JSON.parse(localStorage.getItem('userInfo') || '{}');
+    }
+
+    const autheticated =
+        (userInfoLocal?.userId !== null && userInfoLocal?.userId !== undefined) ||
+        (store?.getters?.getUserInfo?.userId !== null && store?.getters?.getUserInfo?.userId !== undefined);
+
+    const userTypeId = userInfoLocal?.userTypeId || store?.getters?.getUserInfo?.userId;
+
     if (!autheticated && to.matched.some((record) => record.meta.requiresAuth)) {
         next({
             path: '/login',
@@ -93,12 +102,13 @@ router.beforeEach((to, from, next) => {
         return;
     }
 
-    if (to?.meta?.userType && to?.meta?.userType !== store?.getters?.getUserInfo?.type) {
-        console.log('ASDASD');
+    if (to?.meta?.userTypeId && to?.meta?.userTypeId !== userTypeId) {
         next({
             path: '/',
             params: { nextUrl: to.fullPath },
         });
+        window.scrollTo(0, 0);
+        return;
     }
 
     next();

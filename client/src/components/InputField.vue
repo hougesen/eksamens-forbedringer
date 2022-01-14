@@ -14,6 +14,8 @@
             :name="label ? label.toLowerCase() : null"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             :type="inputType"
+            :required="required"
+            autocomplete="off"
             @change="emitValue"
         />
     </div>
@@ -41,6 +43,14 @@ export default Vue.extend({
         inputType: {
             type: String,
             default: 'text',
+        },
+        required: {
+            type: Boolean,
+            default: false,
+        },
+        autocomplete: {
+            type: String,
+            default: null,
         },
     },
 

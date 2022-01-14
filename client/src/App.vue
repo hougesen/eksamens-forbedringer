@@ -1,8 +1,8 @@
 <template>
-    <div class="container mx-auto">
-        <TopNav v-if="loggedIn" />
+    <div class="container mx-auto px-2 pt-2">
+        <TopNav v-if="getUserInfo" />
 
-        <div>
+        <div class="w-full h-full">
             <router-view />
         </div>
     </div>
@@ -10,7 +10,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 
 export default Vue.extend({
     components: {
@@ -18,7 +18,15 @@ export default Vue.extend({
     },
 
     computed: {
-        ...mapGetters(['loggedIn']),
+        ...mapGetters(['getUserInfo']),
+    },
+
+    created() {
+        this.initStore();
+    },
+
+    methods: {
+        ...mapActions(['initStore']),
     },
 });
 </script>

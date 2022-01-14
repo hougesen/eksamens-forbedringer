@@ -6,13 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Server.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace Server
 {
     public class Startup
     {
-        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,7 +35,6 @@ namespace Server
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseCors((options) => options.WithOrigins("*").AllowAnyMethod());
 
             if (env.IsDevelopment())
             {
@@ -48,6 +46,8 @@ namespace Server
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors((options) => options.WithOrigins("*", "http://localhost:8080").AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
 
